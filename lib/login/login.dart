@@ -13,6 +13,28 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
+  void onIncorrectPassword() {
+    setState(() {
+      _password.clear();
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.red.shade400,
+          content: const Text(
+            'Senha incorreta.',
+            style: TextStyle(color: Colors.white),
+          )),
+    );
+  }
+
+  @override
+  void dispose() {
+    _username.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,15 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ? Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/index', (Route<dynamic> route) => false,
                                     arguments: user)
-                                : ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        duration: const Duration(seconds: 3),
-                                        backgroundColor: Colors.red.shade400,
-                                        content: const Text(
-                                          'Senha incorreta.',
-                                          style: TextStyle(color: Colors.white),
-                                        )),
-                                  );
+                                : onIncorrectPassword();
                       }
                     },
                   ),
