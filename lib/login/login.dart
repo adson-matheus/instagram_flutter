@@ -38,12 +38,12 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _username,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Insira um email ou nome de usuário.';
+                              return 'Insira seu nome de usuário.';
                             }
                             return null;
                           },
                           decoration: const InputDecoration(
-                              hintText: 'email ou nome de usuário',
+                              hintText: 'Nome de usuário',
                               border: OutlineInputBorder()),
                         ),
                       ),
@@ -86,13 +86,28 @@ class _LoginPageState extends State<LoginPage> {
                         final Map<String, dynamic>? user =
                             await getUserByUsername(_username.text);
                         user == null
-                            ? const ScaffoldMessenger(
-                                child: SnackBar(
-                                content: Text('Usuário não encontrado'),
-                              ))
-                            : Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/index', (Route<dynamic> route) => false,
-                                arguments: user);
+                            ? ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    duration: const Duration(seconds: 3),
+                                    backgroundColor: Colors.red.shade400,
+                                    content: const Text(
+                                      'Usuário não encontrado',
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                              )
+                            : (_password.text == user['password'])
+                                ? Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/index', (Route<dynamic> route) => false,
+                                    arguments: user)
+                                : ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        duration: const Duration(seconds: 3),
+                                        backgroundColor: Colors.red.shade400,
+                                        content: const Text(
+                                          'Senha incorreta.',
+                                          style: TextStyle(color: Colors.white),
+                                        )),
+                                  );
                       }
                     },
                   ),
