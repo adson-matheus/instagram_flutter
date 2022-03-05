@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_flutter/main.dart';
+import 'package:instagram_flutter/controller/useful_widgets.dart';
 
 class BottomNavigationBarIndex extends StatefulWidget {
   final Map<String, dynamic> user;
