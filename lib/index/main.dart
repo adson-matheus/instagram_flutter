@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
+import 'package:instagram_flutter/index/profile.dart';
 
 class BottomNavigationBarIndex extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -35,7 +36,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
     const Text('Pesquisar'),
     const Text('Reels'),
     const Text('Loja'),
-    const Text('Perfil'),
+    const Profile(),
   ];
 
   void itemTapped(int index) {
@@ -59,8 +60,8 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
         ],
       ),
       body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         child: _widgetOptions.elementAt(_currentIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
