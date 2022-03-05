@@ -29,3 +29,31 @@ class WillPopeScopeExitApp extends StatelessWidget {
         child: child);
   }
 }
+
+class PaddingWithColumn extends StatelessWidget {
+  final String number;
+  final String text;
+  const PaddingWithColumn({Key? key, required this.number, required this.text})
+      : super(key: key);
+
+  final _textStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          Text(
+            number,
+            style: _textStyle,
+          ),
+          Text(
+            text,
+            style: _textStyle,
+          ),
+        ],
+      ),
+    );
+  }
+}
