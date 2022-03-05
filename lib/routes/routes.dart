@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/account/new_user.dart';
-import 'package:instagram_flutter/index.dart';
+import 'package:instagram_flutter/index/main.dart';
 import 'package:instagram_flutter/login/login.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -11,7 +11,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const NewUser());
     case '/index':
       final user = settings.arguments as Map<String, dynamic>;
-      return MaterialPageRoute(builder: (_) => Index(user: user));
+      return MaterialPageRoute(
+          builder: (_) => BottomNavigationBarIndex(user: user));
     default:
       return MaterialPageRoute(builder: (_) => const LoginPage());
   }
