@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 
 class Profile extends StatelessWidget {
-  //final Map<String, dynamic> user;
-  const Profile({Key? key}) : super(key: key);
+  final Map<String, dynamic> user;
+  const Profile({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
