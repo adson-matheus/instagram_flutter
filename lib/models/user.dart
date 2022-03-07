@@ -60,6 +60,11 @@ Future<Map<String, dynamic>?> getUserByUsername(String username) async {
   }
 }
 
+Future<void> deleteUser(int id) async {
+  final db = await databaseCreate();
+  db.delete('User', where: 'id = ?', whereArgs: [id]);
+}
+
 Future<Database> databaseCreate() async {
   WidgetsFlutterBinding.ensureInitialized();
 
