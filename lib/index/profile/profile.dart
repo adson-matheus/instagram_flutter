@@ -150,3 +150,55 @@ class AppBarProfile extends StatelessWidget {
     );
   }
 }
+
+enum menuOption { config, archived, activity, saved }
+
+class ProfileMenuOptions extends StatefulWidget {
+  final int id;
+  const ProfileMenuOptions({Key? key, required this.id}) : super(key: key);
+
+  @override
+  State<ProfileMenuOptions> createState() => _ProfileMenuOptionsState();
+}
+
+class _ProfileMenuOptionsState extends State<ProfileMenuOptions> {
+  late String _selection;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<menuOption>(
+      icon: const Icon(Icons.menu),
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<menuOption>>[
+        PopupMenuItem<menuOption>(
+          value: menuOption.config,
+          child: Row(
+              children: const [Icon(Icons.settings), Text(' Configurações')]),
+        ),
+        PopupMenuItem<menuOption>(
+          value: menuOption.archived,
+          child: Row(
+              children: const [Icon(Icons.history), Text(' Itens Arquivados')]),
+        ),
+        PopupMenuItem<menuOption>(
+          value: menuOption.activity,
+          child: Row(children: const [
+            Icon(Icons.watch_later_outlined),
+            Text(' Sua Atividade')
+          ]),
+        ),
+        PopupMenuItem<menuOption>(
+          value: menuOption.saved,
+          child: Row(
+              children: const [Icon(Icons.bookmark_border), Text(' Salvo')]),
+        ),
+      ],
+      onSelected: (menuOption result) {
+        setState(() => _selection = result.name);
+        if (_selection == 'config') {
+          Navigator.pushNamed(context, '/profile_settings',
+              arguments: widget.id);
+        }
+      },
+    );
+  }
+}
