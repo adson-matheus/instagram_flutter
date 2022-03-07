@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
-import 'package:instagram_flutter/index/profile.dart';
+import 'package:instagram_flutter/index/profile/profile.dart';
 
 class BottomNavigationBarIndex extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -86,7 +86,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
         actions: [
           IconButton(
               onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+          ProfileMenuOptions(id: widget.user['id']),
         ],
       ),
     ];
