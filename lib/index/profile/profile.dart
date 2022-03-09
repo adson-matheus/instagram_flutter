@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
+import 'package:instagram_flutter/index/profile/profile_appbar.dart';
+import 'package:instagram_flutter/index/profile/profile_stories.dart';
 
 class Profile extends StatelessWidget {
   final Map<String, dynamic> user;
@@ -18,7 +20,7 @@ class Profile extends StatelessWidget {
               height: 100,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/adrya.jpg',
+                  'assets/images/profile.jpg',
                   width: 327,
                   height: 327,
                 ),
@@ -34,21 +36,23 @@ class Profile extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 12.0, bottom: 20.0),
+          padding: const EdgeInsets.only(top: 12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.75,
-                child: TextButton(
+                child: OutlinedButton(
                   child: const Text(
                     'Editar Perfil',
-                    style: TextStyle(color: Colors.white),
+                    //style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {},
+                  style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(Colors.white)),
                 ),
               ),
-              TextButton(
+              OutlinedButton(
                 onPressed: () {},
                 child: const Icon(
                   Icons.person_add,
@@ -58,14 +62,6 @@ class Profile extends StatelessWidget {
             ],
           ),
         ),
-        const Text(
-          'Destaques dos stories',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-        const Text('Mantenha seus stories favoritos no seu perfil',
-            style: TextStyle(
-              fontSize: 12,
-            )),
         const ProfileStories(),
         AppBarProfile(),
       ],
@@ -73,132 +69,82 @@ class Profile extends StatelessWidget {
   }
 }
 
-class ProfileStories extends StatelessWidget {
-  const ProfileStories({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: SizedBox(
-        height: 75,
-        width: 75,
-        child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemCount: 10,
-          itemBuilder: (BuildContext context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/adrya.jpg',
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class AppBarProfile extends StatelessWidget {
-  AppBarProfile({Key? key}) : super(key: key);
-
-  final List<Tab> _tab = const <Tab>[
-    Tab(
-      icon: Icon(Icons.grid_4x4),
-    ),
-    Tab(
-      icon: Icon(Icons.photo_camera_front_outlined),
-    ),
-  ];
-
-  final _tabBarView = <Widget>[
-    const Center(child: Text('Perfil')),
-    Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Icon(
-          Icons.photo_camera_front_outlined,
-          size: 40,
-        ),
-        Text('Fotos com você'),
-      ],
-    )
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.5,
-      child: DefaultTabController(
-        length: _tab.length,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: _tab,
-              indicatorColor: Colors.white,
-            ),
-            elevation: 0.0,
-            backgroundColor: Colors.grey[850],
-          ),
-          body: TabBarView(children: _tabBarView),
-        ),
-      ),
-    );
-  }
-}
-
-enum menuOption { config, archived, activity, saved }
-
-class ProfileMenuOptions extends StatefulWidget {
+class ShowBottomSheet extends StatefulWidget {
   final int id;
-  const ProfileMenuOptions({Key? key, required this.id}) : super(key: key);
+  const ShowBottomSheet({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<ProfileMenuOptions> createState() => _ProfileMenuOptionsState();
+  State<ShowBottomSheet> createState() => _ShowBottomSheetState();
 }
 
-class _ProfileMenuOptionsState extends State<ProfileMenuOptions> {
-  late String _selection;
+class _ShowBottomSheetState extends State<ShowBottomSheet> {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(Colors.white)),
+        child: const Icon(Icons.menu),
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return Card(
+                  child: BottomSheetButtons(id: widget.id),
+                );
+              });
+        });
+  }
+}
+
+class BottomSheetButtons extends StatelessWidget {
+  final int id;
+  BottomSheetButtons({Key? key, required this.id}) : super(key: key);
+
+  final ButtonStyle style = ButtonStyle(
+      foregroundColor: MaterialStateProperty.all(Colors.white),
+      alignment: Alignment.centerLeft,
+      minimumSize:
+          MaterialStateProperty.all<Size>(const Size(double.infinity, 50)));
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<menuOption>(
-      icon: const Icon(Icons.menu),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<menuOption>>[
-        PopupMenuItem<menuOption>(
-          value: menuOption.config,
-          child: Row(
-              children: const [Icon(Icons.settings), Text(' Configurações')]),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextButton.icon(
+            style: style,
+            icon: const Icon(
+              Icons.settings,
+            ),
+            label: const Text('Configurações'),
+            onPressed: () => Navigator.pushNamed(context, '/profile_settings',
+                arguments: id)),
+        TextButton.icon(
+          style: style,
+          icon: const Icon(
+            Icons.history,
+          ),
+          label: const Text('Itens Arquivados'),
+          onPressed: () {},
         ),
-        PopupMenuItem<menuOption>(
-          value: menuOption.archived,
-          child: Row(
-              children: const [Icon(Icons.history), Text(' Itens Arquivados')]),
+        TextButton.icon(
+          style: style,
+          icon: const Icon(
+            Icons.watch_later_outlined,
+          ),
+          label: const Text('Sua Atividade'),
+          onPressed: () {},
         ),
-        PopupMenuItem<menuOption>(
-          value: menuOption.activity,
-          child: Row(children: const [
-            Icon(Icons.watch_later_outlined),
-            Text(' Sua Atividade')
-          ]),
-        ),
-        PopupMenuItem<menuOption>(
-          value: menuOption.saved,
-          child: Row(
-              children: const [Icon(Icons.bookmark_border), Text(' Salvo')]),
+        TextButton.icon(
+          style: style,
+          icon: const Icon(
+            Icons.bookmark_border,
+          ),
+          label: const Text('Salvo'),
+          onPressed: () {},
         ),
       ],
-      onSelected: (menuOption result) {
-        setState(() => _selection = result.name);
-        if (_selection == 'config') {
-          Navigator.pushNamed(context, '/profile_settings',
-              arguments: widget.id);
-        }
-      },
     );
   }
 }
