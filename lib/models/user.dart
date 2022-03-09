@@ -71,7 +71,7 @@ Future<Database> databaseCreate() async {
   final database = openDatabase(
     join(await getDatabasesPath(), 'instagram.db'),
     version: 1,
-    onCreate: (db, version) async {
+    onOpen: (db) async {
       await db.execute(
           'CREATE TABLE IF NOT EXISTS User (id INTEGER PRIMARY KEY, name TEXT, username TEXT, password TEXT, email TEXT)');
     },
