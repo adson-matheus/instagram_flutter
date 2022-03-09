@@ -86,7 +86,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
         actions: [
           IconButton(
               onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
-          ProfileMenuOptions(id: widget.user['id']),
+          ShowBottomSheet(id: widget.user['id']),
         ],
       ),
     ];
