@@ -124,11 +124,13 @@ class _NewUserState extends State<NewUser> {
                                 MaterialStateProperty.all(Colors.blue)),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    duration: Duration(seconds: 2),
-                                    backgroundColor: Colors.white,
-                                    content: Text('Aguarde...')));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                duration: const Duration(seconds: 5),
+                                backgroundColor: Colors.teal,
+                                content: Text(
+                                  'Bem vindo, ${_username.text}',
+                                  style: const TextStyle(color: Colors.white),
+                                )));
                             const CircularProgressIndicator(
                               semanticsLabel: 'Carregando...',
                             );
