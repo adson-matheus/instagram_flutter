@@ -68,31 +68,44 @@ class _NewUserState extends State<NewUser> {
                   children: [
                     FormFieldWithPadding(
                       controller: _name,
-                      validatorReturn: 'Insira seu nome',
+                      validatorReturn: 'Insira seu nome (máx. 50 caracteres)',
                       hintTextDecoration: 'Nome e sobrenome',
+                      textInputType: TextInputType.name,
+                      textCapitalization: TextCapitalization.words,
                       isPassword: false,
                       isEmail: false,
+                      isUsername: false,
                     ),
                     FormFieldWithPadding(
                         controller: _username,
-                        validatorReturn: 'Insira um nome de usuário.',
+                        validatorReturn:
+                            'Nome de usuário sem espaços (máx. 20 caracteres)',
                         hintTextDecoration: 'Username',
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.none,
                         isPassword: false,
-                        isEmail: false),
+                        isEmail: false,
+                        isUsername: true),
                     FormFieldWithPadding(
                       controller: _email,
                       validatorReturn: 'Digite um email válido.',
                       hintTextDecoration: 'Email',
+                      textInputType: TextInputType.emailAddress,
+                      textCapitalization: TextCapitalization.none,
                       isPassword: false,
                       isEmail: true,
+                      isUsername: false,
                     ),
                     FormFieldWithPadding(
-                      controller: _password,
-                      validatorReturn: 'Insira uma senha.',
-                      hintTextDecoration: 'Senha',
-                      isPassword: true,
-                      isEmail: false,
-                    ),
+                        controller: _password,
+                        validatorReturn:
+                            'Insira uma senha (máx. 50 caracteres)',
+                        hintTextDecoration: 'Senha',
+                        textInputType: TextInputType.visiblePassword,
+                        textCapitalization: TextCapitalization.none,
+                        isPassword: true,
+                        isEmail: false,
+                        isUsername: false),
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 10.0, right: 16.0, left: 16.0),
@@ -141,16 +154,22 @@ class FormFieldWithPadding extends StatelessWidget {
   final TextEditingController controller;
   final String validatorReturn;
   final String hintTextDecoration;
+  final TextInputType textInputType;
+  final TextCapitalization textCapitalization;
   final bool isPassword;
   final bool isEmail;
+  final bool isUsername;
 
   const FormFieldWithPadding(
       {Key? key,
       required this.controller,
       required this.validatorReturn,
       required this.hintTextDecoration,
+      required this.textInputType,
+      required this.textCapitalization,
       required this.isPassword,
-      required this.isEmail})
+      required this.isEmail,
+      required this.isUsername})
       : super(key: key);
 
   bool emailValidator() {
@@ -164,6 +183,8 @@ class FormFieldWithPadding extends StatelessWidget {
       child: TextFormField(
           controller: controller,
           obscureText: isPassword,
+          keyboardType: textInputType,
+          textCapitalization: textCapitalization,
           decoration: InputDecoration(
               hintText: hintTextDecoration, border: const OutlineInputBorder()),
           validator: isEmail
@@ -173,12 +194,22 @@ class FormFieldWithPadding extends StatelessWidget {
                   }
                   return null;
                 }
-              : (value) {
-                  if (value == null || value.isEmpty) {
-                    return validatorReturn;
-                  }
-                  return null;
-                }),
+              : isUsername
+                  ? (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          value.contains(' ') ||
+                          value.length > 20) {
+                        return validatorReturn;
+                      }
+                      return null;
+                    }
+                  : (value) {
+                      if (value == null || value.isEmpty || value.length > 50) {
+                        return validatorReturn;
+                      }
+                      return null;
+                    }),
     );
   }
 }
