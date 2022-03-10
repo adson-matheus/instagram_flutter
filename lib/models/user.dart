@@ -3,14 +3,20 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class User {
-  int? id;
+  final int? id;
   final String name;
   final String username;
   final String password;
   final String email;
+  final int followers;
+  final int following;
+  final int totalPubs;
 
   User({
     this.id,
+    this.followers = 0,
+    this.following = 0,
+    this.totalPubs = 0,
     required this.name,
     required this.username,
     required this.password,
@@ -29,7 +35,10 @@ class User {
       'name': name,
       'username': username,
       'email': email,
-      'password': password
+      'password': password,
+      'followers': followers,
+      'following': following,
+      'totalPubs': totalPubs,
     };
   }
 
@@ -43,7 +52,15 @@ class User {
 Future<Map<String, dynamic>> getUserById(int id) async {
   final db = await databaseCreate();
   final user = await db.query('User',
-      columns: ['id', 'name', 'username', 'email'],
+      columns: [
+        'id',
+        'name',
+        'username',
+        'email',
+        'followers',
+        'following',
+        'totalPubs'
+      ],
       where: 'id = ?',
       whereArgs: [id]);
   return user.first;
@@ -72,9 +89,33 @@ Future<Database> databaseCreate() async {
     join(await getDatabasesPath(), 'instagram.db'),
     version: 1,
     onOpen: (db) async {
-      await db.execute(
-          'CREATE TABLE IF NOT EXISTS User (id INTEGER PRIMARY KEY, name TEXT, username TEXT, password TEXT, email TEXT)');
+      await db.execute("""
+          CREATE TABLE IF NOT EXISTS User
+          (id INTEGER PRIMARY KEY,
+          name TEXT,
+          username TEXT,
+          password TEXT,
+          email TEXT,
+          followers INTEGER,
+          following INTEGER,
+          totalPubs INTEGER,
+          UNIQUE(username, email))
+          """);
     },
   );
   return database;
+}
+
+Future<void> drop() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  openDatabase(
+    join(await getDatabasesPath(), 'instagram.db'),
+    version: 1,
+    onOpen: (db) async {
+      await db.execute("""
+          DROP TABLE IF EXISTS User
+          """);
+    },
+  );
 }
