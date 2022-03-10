@@ -88,9 +88,7 @@ class _ShowBottomSheetState extends State<ShowBottomSheet> {
           showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return Card(
-                  child: BottomSheetButtons(id: widget.id),
-                );
+                return BottomSheetButtons(id: widget.id);
               });
         });
   }
