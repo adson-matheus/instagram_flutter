@@ -32,7 +32,7 @@ class WillPopeScopeExitApp extends StatelessWidget {
 }
 
 class PaddingWithColumn extends StatelessWidget {
-  final String number;
+  final int number;
   final String text;
   const PaddingWithColumn({Key? key, required this.number, required this.text})
       : super(key: key);
@@ -46,7 +46,7 @@ class PaddingWithColumn extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(
-            number,
+            number.toString(),
             style: _textStyle,
           ),
           Text(

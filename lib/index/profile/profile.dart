@@ -27,10 +27,12 @@ class Profile extends StatelessWidget {
               ),
             ),
             Row(
-              children: const [
-                PaddingWithColumn(number: '0', text: 'Publicações'),
-                PaddingWithColumn(number: '1', text: 'Seguidores'),
-                PaddingWithColumn(number: '139', text: 'Seguindo'),
+              children: [
+                PaddingWithColumn(
+                    number: user['totalPubs'], text: 'Publicações'),
+                PaddingWithColumn(
+                    number: user['followers'], text: 'Seguidores'),
+                PaddingWithColumn(number: user['following'], text: 'Seguindo'),
               ],
             )
           ],
