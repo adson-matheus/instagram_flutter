@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/routes/routes.dart';
 
+import 'models/user.dart';
+
 void main() {
+  databaseCreate();
   runApp(const MyApp());
 }
 
