@@ -50,80 +50,89 @@ class _NewUserState extends State<NewUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        child: ListView(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(top: 0.0),
-                  child: Text(
-                    'Instagram',
-                    style:
-                        TextStyle(fontSize: 48, fontFamily: 'Lobster-Regular'),
-                  ),
-                ),
-              ],
-            ),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  FormFieldWithPadding(
-                    controller: _name,
-                    validatorReturn: 'Insira seu nome',
-                    hintTextDecoration: 'Nome e sobrenome',
-                    isPassword: false,
-                    isEmail: false,
-                  ),
-                  FormFieldWithPadding(
-                      controller: _username,
-                      validatorReturn: 'Insira um nome de usuário.',
-                      hintTextDecoration: 'Username',
-                      isPassword: false,
-                      isEmail: false),
-                  FormFieldWithPadding(
-                    controller: _email,
-                    validatorReturn: 'Digite um email válido.',
-                    hintTextDecoration: 'Email',
-                    isPassword: false,
-                    isEmail: true,
-                  ),
-                  FormFieldWithPadding(
-                    controller: _password,
-                    validatorReturn: 'Insira uma senha.',
-                    hintTextDecoration: 'Senha',
-                    isPassword: true,
-                    isEmail: false,
-                  ),
-                  TextButton(
-                    child: const Text('Cadastrar'),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                duration: Duration(seconds: 2),
-                                backgroundColor: Colors.white,
-                                content: Text('Aguarde...')));
-                        const CircularProgressIndicator(
-                          semanticsLabel: 'Carregando...',
-                        );
-                        newUser();
-
-                        Navigator.popAndPushNamed(context, '/login');
-                        //sendEmail();
-
-                        //dispose();
-                      }
-                    },
-                  )
-                ],
+      body: ListView(children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                'Instagram',
+                style: TextStyle(fontSize: 48, fontFamily: 'Lobster-Regular'),
               ),
-            ),
-          ],
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    FormFieldWithPadding(
+                      controller: _name,
+                      validatorReturn: 'Insira seu nome',
+                      hintTextDecoration: 'Nome e sobrenome',
+                      isPassword: false,
+                      isEmail: false,
+                    ),
+                    FormFieldWithPadding(
+                        controller: _username,
+                        validatorReturn: 'Insira um nome de usuário.',
+                        hintTextDecoration: 'Username',
+                        isPassword: false,
+                        isEmail: false),
+                    FormFieldWithPadding(
+                      controller: _email,
+                      validatorReturn: 'Digite um email válido.',
+                      hintTextDecoration: 'Email',
+                      isPassword: false,
+                      isEmail: true,
+                    ),
+                    FormFieldWithPadding(
+                      controller: _password,
+                      validatorReturn: 'Insira uma senha.',
+                      hintTextDecoration: 'Senha',
+                      isPassword: true,
+                      isEmail: false,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 10.0, right: 16.0, left: 16.0),
+                      child: TextButton(
+                        child: const Text(
+                          'Cadastrar',
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                            elevation: MaterialStateProperty.all(5.0),
+                            minimumSize: MaterialStateProperty.all<Size>(
+                                Size(MediaQuery.of(context).size.width, 50)),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue)),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.white,
+                                    content: Text('Aguarde...')));
+                            const CircularProgressIndicator(
+                              semanticsLabel: 'Carregando...',
+                            );
+                            newUser();
+
+                            Navigator.popAndPushNamed(context, '/login');
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }
@@ -156,7 +165,7 @@ class FormFieldWithPadding extends StatelessWidget {
           controller: controller,
           obscureText: isPassword,
           decoration: InputDecoration(
-              hintText: validatorReturn, border: const OutlineInputBorder()),
+              hintText: hintTextDecoration, border: const OutlineInputBorder()),
           validator: isEmail
               ? (value) {
                   if (!emailValidator()) {
