@@ -35,7 +35,7 @@ class _NewUserState extends State<NewUser> {
         username: _username.text,
         password: _password.text,
         email: _email.text);
-    await user.createUser(user);
+    await user.createUser();
   }
 
   @override
@@ -122,19 +122,48 @@ class _NewUserState extends State<NewUser> {
                                 Size(MediaQuery.of(context).size.width, 50)),
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.blue)),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    duration: Duration(seconds: 2),
-                                    backgroundColor: Colors.white,
-                                    content: Text('Aguarde...')));
-                            const CircularProgressIndicator(
-                              semanticsLabel: 'Carregando...',
-                            );
-                            newUser();
+                            bool userExists =
+                                await checkIfUserExists(_username.text);
+                            bool emailExists =
+                                await checkIfEmailExists(_email.text);
 
-                            Navigator.popAndPushNamed(context, '/login');
+                            if (!userExists && !emailExists) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      duration: const Duration(seconds: 5),
+                                      backgroundColor: Colors.teal,
+                                      content: Text(
+                                        'Bem vindo, ${_username.text}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      )));
+                              newUser();
+                              Navigator.popAndPushNamed(context, '/login');
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Tente Novamente.'),
+                                      content: userExists
+                                          ? emailExists
+                                              ? const Text(
+                                                  'Usuário e email já existem!')
+                                              : const Text(
+                                                  'Este usuário já existe')
+                                          : const Text(
+                                              'Este email já foi cadastrado'),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text('Ok'),
+                                            onPressed: () =>
+                                                Navigator.of(context).pop())
+                                      ],
+                                    );
+                                  });
+                            }
                           }
                         },
                       ),

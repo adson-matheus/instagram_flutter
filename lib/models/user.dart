@@ -23,10 +23,9 @@ class User {
     required this.email,
   });
 
-  Future<void> createUser(User user) async {
+  Future<void> createUser() async {
     final db = await databaseCreate();
-    db.insert('User', user.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    db.insert('User', toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Map<String, dynamic> toMap() {
@@ -74,6 +73,23 @@ Future<Map<String, dynamic>?> getUserByUsername(String username) async {
   } else {
     return user.first;
   }
+}
+
+Future<bool> checkIfUserExists(String username) async {
+  final db = await databaseCreate();
+  final user = await db.query('User',
+      where: 'username = ?', whereArgs: [username], columns: ['username']);
+
+  if (user.isEmpty) return false;
+  return true;
+}
+
+Future<bool> checkIfEmailExists(String userEmail) async {
+  final db = await databaseCreate();
+  final email = await db.query('User',
+      where: 'email = ?', whereArgs: [userEmail], columns: ['email']);
+  if (email.isEmpty) return false;
+  return true;
 }
 
 Future<void> deleteUser(int id) async {
