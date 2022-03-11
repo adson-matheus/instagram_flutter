@@ -49,7 +49,8 @@ class Profile extends StatelessWidget {
                     'Editar Perfil',
                     //style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed('/profile_edit', arguments: user),
                   style: ButtonStyle(
                       foregroundColor: MaterialStateProperty.all(Colors.white)),
                 ),
