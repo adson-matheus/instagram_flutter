@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/models/user.dart';
 
 class NewUser extends StatefulWidget {
@@ -146,70 +146,6 @@ class _NewUserState extends State<NewUser> {
           ),
         ),
       ]),
-    );
-  }
-}
-
-class FormFieldWithPadding extends StatelessWidget {
-  final TextEditingController controller;
-  final String validatorReturn;
-  final String hintTextDecoration;
-  final TextInputType textInputType;
-  final TextCapitalization textCapitalization;
-  final bool isPassword;
-  final bool isEmail;
-  final bool isUsername;
-
-  const FormFieldWithPadding(
-      {Key? key,
-      required this.controller,
-      required this.validatorReturn,
-      required this.hintTextDecoration,
-      required this.textInputType,
-      required this.textCapitalization,
-      required this.isPassword,
-      required this.isEmail,
-      required this.isUsername})
-      : super(key: key);
-
-  bool emailValidator() {
-    return EmailValidator.validate(controller.text);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16.0, left: 16.0, top: 10.0),
-      child: TextFormField(
-          controller: controller,
-          obscureText: isPassword,
-          keyboardType: textInputType,
-          textCapitalization: textCapitalization,
-          decoration: InputDecoration(
-              hintText: hintTextDecoration, border: const OutlineInputBorder()),
-          validator: isEmail
-              ? (value) {
-                  if (!emailValidator()) {
-                    return validatorReturn;
-                  }
-                  return null;
-                }
-              : isUsername
-                  ? (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          value.contains(' ') ||
-                          value.length > 20) {
-                        return validatorReturn;
-                      }
-                      return null;
-                    }
-                  : (value) {
-                      if (value == null || value.isEmpty || value.length > 50) {
-                        return validatorReturn;
-                      }
-                      return null;
-                    }),
     );
   }
 }
