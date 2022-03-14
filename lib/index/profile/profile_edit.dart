@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
+import 'package:instagram_flutter/index/profile/profile_edit_update.dart';
 import 'package:instagram_flutter/models/user.dart';
 
 class EditProfile extends StatefulWidget {
   final Map<String, dynamic> user;
+  final Text _title = const Text('Editar Perfil');
+
   const EditProfile({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -11,21 +14,19 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final Text _title = const Text('Editar Perfil');
-
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _email = TextEditingController();
+  late Map<String, dynamic> user;
 
-  Future<void> updateUser() async {
-    User user = User(
-        id: widget.user['id'],
-        name: _name.text,
-        username: _username.text,
-        email: _email.text,
-        password: widget.user['password']);
-    await user.update();
+  @override
+  void initState() {
+    super.initState();
+    user = widget.user;
+    _name.text = user['name'];
+    _username.text = user['username'];
+    _email.text = user['email'];
   }
 
   @override
@@ -36,43 +37,71 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
+  Future<void> updateUser() async {
+    User updatedUser = User(
+      id: user['id'],
+      name: _name.text,
+      username: _username.text,
+      email: _email.text,
+      password: user['password'],
+      followers: user['followers'],
+      following: user['following'],
+      totalPubs: user['totalPubs'],
+    );
+    setState(() {
+      user = updatedUser.toMap();
+    });
+    await updatedUser.update();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: _title),
+      appBar: AppBar(title: widget._title),
       body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: ListView(
             children: [
-              Row(
-                children: [
-                  ClipOval(
-                    child: Image.asset(
-                      'assets/images/profile.jpg',
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      width: MediaQuery.of(context).size.width * 0.25,
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        widget.user['username'],
-                        style: const TextStyle(fontSize: 24),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/profile.jpg',
+                            height: MediaQuery.of(context).size.height * 0.25,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                          ),
+                        ),
                       ),
-                      TextButton(
-                          child: const Text('Alterar foto do perfil'),
-                          onPressed: () {})
-                    ],
-                  ),
-                ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          user['username'],
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        TextButton(
+                            child: const Text('Alterar foto do perfil'),
+                            onPressed: () {})
+                      ],
+                    ),
+                  ],
+                ),
               ),
               Form(
                   key: _formKey,
                   child: Column(
                     children: [
                       FormFieldWithPadding(
-                        initialValue: widget.user['name'],
+                        controller: _name,
                         validatorReturn: 'Insira seu nome (máx. 50 caracteres)',
                         hintTextDecoration: 'Nome e sobrenome',
                         textInputType: TextInputType.name,
@@ -82,7 +111,7 @@ class _EditProfileState extends State<EditProfile> {
                         isUsername: false,
                       ),
                       FormFieldWithPadding(
-                          initialValue: widget.user['username'],
+                          controller: _username,
                           validatorReturn:
                               'Nome de usuário sem espaços (máx. 20 caracteres)',
                           hintTextDecoration: 'Username',
@@ -92,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
                           isEmail: false,
                           isUsername: true),
                       FormFieldWithPadding(
-                        initialValue: widget.user['email'],
+                        controller: _email,
                         validatorReturn: 'Digite um email válido.',
                         hintTextDecoration: 'Email',
                         textInputType: TextInputType.emailAddress,
@@ -101,31 +130,28 @@ class _EditProfileState extends State<EditProfile> {
                         isEmail: true,
                         isUsername: false,
                       ),
-                      OutlinedButton(
-                        child: const Text(
-                          'Enviar',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue)),
-                        onPressed: () {},
-                        // onPressed: () async {
-                        //   final res = await result(context);
-                        //   if (res) {
-                        //     await updateUser();
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       const SnackBar(
-                        //           duration: Duration(seconds: 2),
-                        //           backgroundColor: Colors.teal,
-                        //           content: Text(
-                        //             'Editado com sucesso!',
-                        //             style: TextStyle(color: Colors.white),
-                        //           )),
-                        //     );
-                        //   }
-                        // },
-                      )
+                      ElevatedButton(
+                          child: const Text(
+                            'Enviar',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.blue)),
+                          onPressed: () async {
+                            if (_name.text != user['name'] ||
+                                _username.text != user['username'] ||
+                                _email.text != user['email']) {
+                              bool canUpdate = await onPressedUpdate(
+                                  _formKey, context, user, _username, _email);
+                              if (canUpdate) {
+                                await updateUser();
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/index', (route) => false,
+                                    arguments: user);
+                              }
+                            }
+                          })
                     ],
                   ))
             ],
@@ -134,40 +160,21 @@ class _EditProfileState extends State<EditProfile> {
   }
 }
 
-Future<bool> result(context) async {
-  final result = await showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-            title: const Text('Salvar alterações?'),
-            actions: [
-              TextButton(
-                  child: const Text('Não'),
-                  onPressed: () => Navigator.pop(context, false)),
-              TextButton(
-                  child: const Text('Sim'),
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  }),
-            ],
-          ));
-  return result;
-}
-
-class AlertEdit extends StatelessWidget {
-  const AlertEdit({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Salvar alterações?'),
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Não')),
-        TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Sim')),
-      ],
-    );
-  }
-}
+// Future<bool> result(context) async {
+//   final result = await showDialog(
+//       context: context,
+//       builder: (BuildContext context) => AlertDialog(
+//             title: const Text('Salvar alterações?'),
+//             actions: [
+//               TextButton(
+//                   child: const Text('Não'),
+//                   onPressed: () => Navigator.pop(context, false)),
+//               TextButton(
+//                   child: const Text('Sim'),
+//                   onPressed: () {
+//                     Navigator.pop(context, true);
+//                   }),
+//             ],
+//           ));
+//   return result;
+// }
