@@ -41,10 +41,9 @@ class User {
     };
   }
 
-  Future<int> update(User user) async {
+  Future<void> update() async {
     final db = await databaseCreate();
-    return await db
-        .update('User', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
+    await db.update('User', toMap(), where: 'id = ?', whereArgs: [id]);
   }
 }
 
