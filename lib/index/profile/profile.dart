@@ -47,7 +47,6 @@ class Profile extends StatelessWidget {
                 child: OutlinedButton(
                   child: const Text(
                     'Editar Perfil',
-                    //style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () => Navigator.of(context)
                       .pushNamed('/profile_edit', arguments: user),
