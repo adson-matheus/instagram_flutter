@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/index/profile/profile.dart';
+import 'package:instagram_flutter/index/search/search.dart';
 
 class BottomNavigationBarIndex extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -93,7 +94,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
 
     final List<Widget> _widgetOptions = <Widget>[
       const Text('Início'),
-      const Text('Pesquisar'),
+      const SearchPageWidget(),
       const Text('Reels'),
       const Text('Loja'),
       Profile(user: widget.user),
