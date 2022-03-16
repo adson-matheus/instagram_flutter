@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/index/profile/profile.dart';
 import 'package:instagram_flutter/index/search/search.dart';
+import 'package:instagram_flutter/index/profile/profile_bottom_sheet.dart';
+import 'package:instagram_flutter/models/profile_picture.dart';
 
 class BottomNavigationBarIndex extends StatefulWidget {
   final Map<String, dynamic> user;
-  const BottomNavigationBarIndex({Key? key, required this.user})
+  final int? selectBody;
+  const BottomNavigationBarIndex(
+      {Key? key, required this.user, this.selectBody})
       : super(key: key);
 
   @override
@@ -14,9 +18,15 @@ class BottomNavigationBarIndex extends StatefulWidget {
 }
 
 class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
-  int _currentBody = 0;
+  late int _currentBody;
   static const Color _selectedItemColor = Colors.white;
   static const Color _unselectedItemColor = Colors.white70;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentBody = widget.selectBody ?? 0;
+  }
 
   void itemTapped(int index) {
     setState(() {
@@ -97,27 +107,41 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
       const SearchPageWidget(),
       const Text('Reels'),
       const Text('Loja'),
-      Profile(user: widget.user),
+      //ProfileWidget(user: widget.user, profilePicture: profilePicture),
     ];
 
-    return WillPopeScopeExitApp(
-        child: Scaffold(
-      appBar: _appBarOptions.elementAt(_currentBody),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: _widgetOptions.elementAt(_currentBody),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: _items,
-        onTap: itemTapped,
-        currentIndex: _currentBody,
-        selectedItemColor: _selectedItemColor,
-        unselectedItemColor: _unselectedItemColor,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-      ),
-    ));
+    return FutureBuilder<Map<String, dynamic>>(
+        future: getPicture(widget.user['id']),
+        builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+          if (snapshot.hasData) {
+            return WillPopeScopeExitApp(
+                child: Scaffold(
+              appBar: _appBarOptions.elementAt(_currentBody),
+              body: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: _currentBody == 4
+                    ? ProfileWidget(
+                        user: widget.user, profilePicture: snapshot.data!)
+                    : _widgetOptions.elementAt(_currentBody),
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                items: _items,
+                onTap: itemTapped,
+                currentIndex: _currentBody,
+                selectedItemColor: _selectedItemColor,
+                unselectedItemColor: _unselectedItemColor,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                type: BottomNavigationBarType.fixed,
+              ),
+            ));
+          } else {
+            return const Padding(
+              padding: EdgeInsets.all(24.0),
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }

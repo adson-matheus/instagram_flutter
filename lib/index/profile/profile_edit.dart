@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/index/profile/profile_edit_update.dart';
+import 'package:instagram_flutter/models/profile_picture.dart';
 import 'package:instagram_flutter/models/user.dart';
 
 class EditProfile extends StatefulWidget {
   final Map<String, dynamic> user;
+  final Map<String, dynamic> profilePicture;
   final Text _title = const Text('Editar Perfil');
 
-  const EditProfile({Key? key, required this.user}) : super(key: key);
+  const EditProfile(
+      {Key? key, required this.user, required this.profilePicture})
+      : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -19,11 +23,14 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _email = TextEditingController();
   late Map<String, dynamic> user;
+  late Map<String, dynamic> profilePicture;
+  Map<String, dynamic>? newProfilePicture;
 
   @override
   void initState() {
     super.initState();
     user = widget.user;
+    profilePicture = widget.profilePicture;
     _name.text = user['name'];
     _username.text = user['username'];
     _email.text = user['email'];
@@ -74,12 +81,12 @@ class _EditProfileState extends State<EditProfile> {
                         height: 100,
                         width: 100,
                         child: ClipOval(
-                          child: Image.asset(
-                            'assets/images/profile.jpg',
-                            height: MediaQuery.of(context).size.height * 0.25,
-                            width: MediaQuery.of(context).size.width * 0.25,
-                          ),
-                        ),
+                            child: Image.memory(
+                          profilePicture['picture'],
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          fit: BoxFit.cover,
+                        )),
                       ),
                     ),
                     Column(
@@ -90,7 +97,18 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         TextButton(
                             child: const Text('Alterar foto do perfil'),
-                            onPressed: () {})
+                            onPressed: () async {
+                              newProfilePicture =
+                                  await setNewProfilePicture(profilePicture);
+                              if (newProfilePicture != null) {
+                                setState(() {
+                                  profilePicture = newProfilePicture!;
+                                });
+                              }
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/index', (route) => false,
+                                  arguments: <Object>[user, 4]);
+                            })
                       ],
                     ),
                   ],
@@ -148,7 +166,7 @@ class _EditProfileState extends State<EditProfile> {
                                 await updateUser();
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/index', (route) => false,
-                                    arguments: user);
+                                    arguments: <Object>[user, 4]);
                               }
                             }
                           })
@@ -159,22 +177,3 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 }
-
-// Future<bool> result(context) async {
-//   final result = await showDialog(
-//       context: context,
-//       builder: (BuildContext context) => AlertDialog(
-//             title: const Text('Salvar alterações?'),
-//             actions: [
-//               TextButton(
-//                   child: const Text('Não'),
-//                   onPressed: () => Navigator.pop(context, false)),
-//               TextButton(
-//                   child: const Text('Sim'),
-//                   onPressed: () {
-//                     Navigator.pop(context, true);
-//                   }),
-//             ],
-//           ));
-//   return result;
-// }

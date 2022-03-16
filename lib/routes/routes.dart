@@ -15,15 +15,27 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/new/user':
       return MaterialPageRoute(builder: (_) => const NewUser());
     case '/index':
-      final user = settings.arguments as Map<String, dynamic>;
+      final args = settings.arguments as List<Object>;
+      final user = args[0] as Map<String, dynamic>;
+      if (args.length > 1) {
+        final selectBody = args[1] as int;
+        return MaterialPageRoute(
+            builder: (_) =>
+                BottomNavigationBarIndex(user: user, selectBody: selectBody));
+      }
       return MaterialPageRoute(
           builder: (_) => BottomNavigationBarIndex(user: user));
+
     case '/profile_settings':
       final id = settings.arguments as int;
       return MaterialPageRoute(builder: (_) => ProfileSettings(id: id));
     case '/profile_edit':
-      final user = settings.arguments as Map<String, dynamic>;
-      return MaterialPageRoute(builder: (_) => EditProfile(user: user));
+      final args = settings.arguments as List<Map<String, dynamic>>;
+      final user = args[0];
+      final profilePicture = args[1];
+      return MaterialPageRoute(
+          builder: (_) =>
+              EditProfile(user: user, profilePicture: profilePicture));
     default:
       return MaterialPageRoute(builder: (_) => const LoginPage());
   }
