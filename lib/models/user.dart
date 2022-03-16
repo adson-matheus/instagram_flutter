@@ -93,6 +93,16 @@ Future<List<Map<String, dynamic>>?> getUsers() async {
   return null;
 }
 
+Future<List<Map<String, Object?>>> getUsersAndProfilePictures() async {
+  final db = await databaseCreate();
+
+  return await db.rawQuery("""
+      SELECT u.id, u.name, u.username, u.followers, u.following, u.totalPubs, p.picture
+      FROM User u, Picture p
+      WHERE u.id = p.userId
+  """);
+}
+
 Future<bool> checkIfUserExists(String username) async {
   final db = await databaseCreate();
   final user = await db.query('User',
