@@ -14,19 +14,58 @@ class _SearchPageWidgetState extends State<SearchPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<Map<String, dynamic>>?>(
-          future: getUsers(),
+          future: getUsersAndProfilePictures(),
           builder:
               ((context, AsyncSnapshot<List<Map<String, dynamic>>?> snapshot) {
             if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, itemCount) {
-                    return SearchField(
-                        suggestions: snapshot.data!
-                            .map(
-                                (user) => SearchFieldListItem(user['username']))
-                            .toList());
-                  });
+              return SingleChildScrollView(
+                child: SearchField(
+                  suggestions: snapshot.data!
+                      .map((user) => SearchFieldListItem(user['username'],
+                          item: user,
+                          child: ListTile(
+                            leading: SizedBox(
+                              width: 56,
+                              height: 100,
+                              child: ClipOval(
+                                child: Image.memory(
+                                  user['picture'],
+                                  width: 327,
+                                  height: 327,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              user['username'],
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              user['name'],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            contentPadding: EdgeInsets.zero,
+                          )))
+                      .toList(),
+                  hint: 'Pesquisar',
+                  hasOverlay: false,
+                  maxSuggestionsInViewPort: 5,
+                  itemHeight: 100.0,
+                  suggestionState: Suggestion.hidden,
+                  searchStyle: const TextStyle(
+                    height: 2.0,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  emptyWidget: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: const Align(
+                        alignment: Alignment.topCenter,
+                        child: Text('Sem resultados')),
+                  ),
+                ),
+              );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             } else {
