@@ -17,10 +17,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/index':
       final args = settings.arguments as List<Object>;
       final user = args[0] as Map<String, dynamic>;
-      final selectBody = args[1] as int;
+      if (args.length > 1) {
+        final selectBody = args[1] as int;
+        return MaterialPageRoute(
+            builder: (_) =>
+                BottomNavigationBarIndex(user: user, selectBody: selectBody));
+      }
       return MaterialPageRoute(
-          builder: (_) =>
-              BottomNavigationBarIndex(user: user, selectBody: selectBody));
+          builder: (_) => BottomNavigationBarIndex(user: user));
+
     case '/profile_settings':
       final id = settings.arguments as int;
       return MaterialPageRoute(builder: (_) => ProfileSettings(id: id));
