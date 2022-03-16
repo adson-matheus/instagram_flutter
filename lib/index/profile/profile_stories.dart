@@ -29,7 +29,7 @@ class ProfileStories extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ClipOval(
                     child: Image.asset(
-                      'assets/images/profile.jpg',
+                      'assets/images/standard.jpg',
                     ),
                   ),
                 );

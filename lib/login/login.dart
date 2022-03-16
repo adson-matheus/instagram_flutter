@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                             : (_password.text == user['password'])
                                 ? Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/index', (Route<dynamic> route) => false,
-                                    arguments: user)
+                                    arguments: <Object>[user])
                                 : onIncorrectPassword();
                       }
                     },
