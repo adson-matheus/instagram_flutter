@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/profile_picture.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -25,7 +26,10 @@ class User {
 
   Future<void> createUser() async {
     final db = await databaseCreate();
-    db.insert('User', toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    final int id = await db.insert('User', toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+
+    await defaultProfilePicture(id);
   }
 
   Map<String, dynamic> toMap() {
@@ -115,6 +119,14 @@ Future<Database> databaseCreate() async {
           following INTEGER,
           totalPubs INTEGER,
           UNIQUE(username, email))
+          """);
+      await db.execute("""
+          CREATE TABLE IF NOT EXISTS Picture
+          (id INTEGER PRIMARY KEY,
+          userId INTEGER NOT NULL,
+          title TEXT,
+          picture BLOB,
+          FOREIGN KEY(userId) REFERENCES User(id));
           """);
     },
   );
