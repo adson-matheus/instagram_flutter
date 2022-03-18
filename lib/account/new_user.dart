@@ -32,7 +32,7 @@ class _NewUserState extends State<NewUser> {
   Future<void> newUser() async {
     User user = User(
         name: _name.text,
-        username: _username.text,
+        username: _username.text.toLowerCase(),
         password: _password.text,
         email: _email.text);
     await user.createUser();
@@ -135,7 +135,7 @@ class _NewUserState extends State<NewUser> {
                                       duration: const Duration(seconds: 5),
                                       backgroundColor: Colors.teal,
                                       content: Text(
-                                        'Bem vindo, ${_username.text}',
+                                        'Bem vindo, ${_username.text.toLowerCase()}',
                                         style: const TextStyle(
                                             color: Colors.white),
                                       )));

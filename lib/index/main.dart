@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/index/profile/profile.dart';
+import 'package:instagram_flutter/index/search/search.dart';
 import 'package:instagram_flutter/index/profile/profile_bottom_sheet.dart';
 import 'package:instagram_flutter/models/profile_picture.dart';
 
@@ -103,7 +104,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
 
     final List<Widget> _widgetOptions = <Widget>[
       const Text('Início'),
-      const Text('Pesquisar'),
+      const SearchPageWidget(),
       const Text('Reels'),
       const Text('Loja'),
       //ProfileWidget(user: widget.user, profilePicture: profilePicture),
