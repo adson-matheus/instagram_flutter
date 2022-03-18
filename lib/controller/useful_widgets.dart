@@ -130,6 +130,7 @@ class FormFieldWithPadding extends StatelessWidget {
           keyboardType: textInputType,
           textCapitalization: textCapitalization,
           initialValue: initialValue,
+          enableSuggestions: false,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             label: Text(hintTextDecoration),
