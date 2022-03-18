@@ -130,6 +130,7 @@ Future<bool> checkIfEmailExists(String userEmail) async {
 Future<void> deleteUser(int id) async {
   final db = await databaseCreate();
   db.delete('User', where: 'id = ?', whereArgs: [id]);
+  db.delete('Picture', where: 'userId = ?', whereArgs: [id]);
 }
 
 Future<Database> databaseCreate() async {
