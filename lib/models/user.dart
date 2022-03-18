@@ -93,14 +93,21 @@ Future<List<Map<String, dynamic>>?> getUsers() async {
   return null;
 }
 
-Future<List<Map<String, Object?>>> getUsersAndProfilePictures() async {
+Future<List<Map<String, Object?>>?> getUsersAndProfilePictures(
+    String search) async {
   final db = await databaseCreate();
 
-  return await db.rawQuery("""
+  final List<Map<String, Object?>> list = await db.rawQuery("""
       SELECT u.id, u.name, u.username, u.followers, u.following, u.totalPubs, p.picture
       FROM User u, Picture p
       WHERE u.id = p.userId
+      AND (u.username LIKE '$search%' OR u.name LIKE '$search%')
+      LIMIT 5;
   """);
+  if (list.isEmpty) {
+    return null;
+  }
+  return list;
 }
 
 Future<bool> checkIfUserExists(String username) async {
