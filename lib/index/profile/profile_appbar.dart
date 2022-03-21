@@ -21,7 +21,7 @@ class AppBarProfile extends StatelessWidget {
           Icons.photo_camera_front_outlined,
           size: 40,
         ),
-        Text('Fotos com você'),
+        Text('Fotos marcadas'),
       ],
     )
   ];
@@ -34,6 +34,8 @@ class AppBarProfile extends StatelessWidget {
         length: _tab.length,
         child: Scaffold(
           appBar: AppBar(
+            leading: null,
+            automaticallyImplyLeading: false,
             bottom: TabBar(
               tabs: _tab,
               indicatorColor: Colors.white,
