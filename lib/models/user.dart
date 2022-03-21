@@ -79,20 +79,6 @@ Future<Map<String, dynamic>?> getUserByUsername(String username) async {
   }
 }
 
-Future<List<Map<String, dynamic>>?> getUsers() async {
-  final db = await databaseCreate();
-  final users = await db.query('User', columns: [
-    'id',
-    'name',
-    'username',
-    'followers',
-    'following',
-    'totalPubs',
-  ]);
-  if (users.isNotEmpty) return users;
-  return null;
-}
-
 Future<List<Map<String, Object?>>?> getUsersAndProfilePictures(
     String search) async {
   final db = await databaseCreate();
