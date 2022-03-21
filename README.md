@@ -12,3 +12,7 @@ Recriando o app do Instagram utilizando Dart e Flutter
     <img width="470" src="assets/videos/search.gif">
  </p>
  
+ ## Visitando um perfil
+ <p align="center">
+    <img width="470" src="assets/videos/visit_profile.gif">
+ </p>
