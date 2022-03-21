@@ -121,7 +121,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: _currentBody == 4
-                    ? ProfileWidget(
+                    ? ProfilePageWidget(
                         user: widget.user, profilePicture: snapshot.data!)
                     : _widgetOptions.elementAt(_currentBody),
               ),
