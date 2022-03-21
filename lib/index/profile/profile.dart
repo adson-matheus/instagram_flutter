@@ -3,11 +3,11 @@ import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/index/profile/profile_appbar.dart';
 import 'package:instagram_flutter/index/profile/profile_stories.dart';
 
-class ProfileWidget extends StatelessWidget {
+class ProfilePageWidget extends StatelessWidget {
   final Map<String, dynamic> user;
   final Map<String, dynamic> profilePicture;
 
-  const ProfileWidget(
+  const ProfilePageWidget(
       {Key? key, required this.user, required this.profilePicture})
       : super(key: key);
 

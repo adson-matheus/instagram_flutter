@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/account/new_user.dart';
+import 'package:instagram_flutter/account/visit_profile.dart';
 import 'package:instagram_flutter/index/main.dart';
 import 'package:instagram_flutter/index/profile/profile_edit.dart';
 import 'package:instagram_flutter/index/profile/profile_settings.dart';
@@ -25,7 +26,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       }
       return MaterialPageRoute(
           builder: (_) => BottomNavigationBarIndex(user: user));
-
     case '/profile_settings':
       final id = settings.arguments as int;
       return MaterialPageRoute(builder: (_) => ProfileSettings(id: id));
@@ -36,6 +36,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
           builder: (_) =>
               EditProfile(user: user, profilePicture: profilePicture));
+    case '/visit_profile':
+      final user = settings.arguments as Map<String, dynamic>;
+      return MaterialPageRoute(builder: (_) => VisitProfileWidget(user: user));
     default:
       return MaterialPageRoute(builder: (_) => const LoginPage());
   }

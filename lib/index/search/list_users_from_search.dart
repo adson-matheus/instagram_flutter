@@ -39,7 +39,8 @@ class ListUsersFromSearchWidget extends StatelessWidget {
                   style: ListTileStyle.list,
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   horizontalTitleGap: 10,
-                  onTap: () {},
+                  onTap: () => Navigator.of(context)
+                      .pushNamed('/visit_profile', arguments: users![index]),
                 ),
               );
             }))
