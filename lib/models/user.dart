@@ -51,6 +51,19 @@ class User {
   }
 }
 
+User fromMap(user) {
+  return User(
+    id: user['id'],
+    name: user['name'],
+    username: user['username'],
+    password: user['password'],
+    email: user['email'],
+    followers: user['followers'],
+    following: user['following'],
+    totalPubs: user['totalPubs'],
+  );
+}
+
 Future<Map<String, dynamic>> getUserById(int id) async {
   final db = await databaseCreate();
   final user = await db.query('User',
