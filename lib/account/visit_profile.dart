@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/account/follow_an_account.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/index/profile/profile_appbar.dart';
 import 'package:instagram_flutter/index/profile/profile_stories.dart';
 
-class VisitProfileWidget extends StatelessWidget {
+class VisitProfileWidget extends StatefulWidget {
   final Map<String, dynamic> user;
-
   const VisitProfileWidget({
     Key? key,
     required this.user,
   }) : super(key: key);
+
+  @override
+  State<VisitProfileWidget> createState() => _VisitProfileWidgetState();
+}
+
+class _VisitProfileWidgetState extends State<VisitProfileWidget> {
+  late Map<String, dynamic> user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = widget.user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,15 +72,19 @@ class VisitProfileWidget extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.75,
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Seguir',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.blue)),
-                  ),
+                      child: const Text(
+                        'Seguir',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.blue)),
+                      onPressed: () async {
+                        final updated = await follow(user);
+                        setState(() {
+                          user = updated;
+                        });
+                      }),
                 ),
                 ElevatedButton(
                   child: const Icon(
