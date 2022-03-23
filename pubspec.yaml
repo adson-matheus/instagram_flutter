@@ -36,6 +36,7 @@ dependencies:
   flutter_email_sender:
   searchfield:
   image_picker:
+  flutter_native_splash:
 
 
 
