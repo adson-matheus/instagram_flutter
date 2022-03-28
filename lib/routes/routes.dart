@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/account/new_user.dart';
 import 'package:instagram_flutter/account/visit_profile.dart';
+import 'package:instagram_flutter/controller/get_followers.dart';
 import 'package:instagram_flutter/index/main.dart';
 import 'package:instagram_flutter/index/profile/profile_edit.dart';
 import 'package:instagram_flutter/index/profile/profile_settings.dart';
@@ -37,8 +38,23 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (_) =>
               EditProfile(user: user, profilePicture: profilePicture));
     case '/visit_profile':
-      final user = settings.arguments as Map<String, dynamic>;
-      return MaterialPageRoute(builder: (_) => VisitProfileWidget(user: user));
+      final args = settings.arguments as List<Object>;
+      final user = args[0] as Map<String, dynamic>;
+      final loggedUserId = args[1] as int;
+      return MaterialPageRoute(
+          builder: (_) => VisitProfileWidget(
+                user: user,
+                loggedUserId: loggedUserId,
+              ));
+    case '/get_followers_from_user':
+      final args = settings.arguments as List<int>;
+      final userId = args[0];
+      final loggedUserId = args[1];
+      return MaterialPageRoute(
+          builder: (_) => GetFollowersFromUser(
+                userId: userId,
+                loggedUserId: loggedUserId,
+              ));
     default:
       return MaterialPageRoute(builder: (_) => const LoginPage());
   }
