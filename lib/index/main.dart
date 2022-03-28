@@ -104,7 +104,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
 
     final List<Widget> _widgetOptions = <Widget>[
       const Text('Início'),
-      const SearchPageWidget(),
+      SearchPageWidget(loggedUserId: widget.user['id']),
       const Text('Reels'),
       const Text('Loja'),
       //ProfileWidget(user: widget.user, profilePicture: profilePicture),
