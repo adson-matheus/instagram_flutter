@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/controller/useful_widgets.dart';
 
 class ListUsersFromSearchWidget extends StatelessWidget {
   final List<Map<String, dynamic>>? users;
-  const ListUsersFromSearchWidget({Key? key, required this.users})
-      : super(key: key);
+  final int loggedUserId;
+  const ListUsersFromSearchWidget({
+    Key? key,
+    required this.users,
+    required this.loggedUserId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,37 +16,10 @@ class ListUsersFromSearchWidget extends StatelessWidget {
         ? ListView.builder(
             itemCount: users!.length,
             itemBuilder: ((context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  leading: SizedBox(
-                    width: 56,
-                    height: 100,
-                    child: ClipOval(
-                      child: Image.memory(
-                        users![index]['picture'],
-                        width: 327,
-                        height: 327,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    users![index]['username'],
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    users![index]['name'],
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                  style: ListTileStyle.list,
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                  horizontalTitleGap: 10,
-                  onTap: () => Navigator.of(context)
-                      .pushNamed('/visit_profile', arguments: users![index]),
-                ),
+              return ListUsersReusable(
+                content: users!,
+                index: index,
+                loggedUserId: loggedUserId,
               );
             }))
         : const SizedBox(
