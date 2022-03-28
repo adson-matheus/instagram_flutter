@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/followers.dart';
 import 'package:instagram_flutter/models/profile_picture.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -30,6 +31,7 @@ class User {
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     await defaultProfilePicture(id);
+    await defaultFollowers(id);
   }
 
   Map<String, dynamic> toMap() {
