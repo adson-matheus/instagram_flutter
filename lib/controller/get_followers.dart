@@ -49,7 +49,10 @@ class _GetFollowersFromUserState extends State<GetFollowersFromUser> {
               ),
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Scaffold(
+                body: Center(
+              child: Text('Sem seguidores'),
+            ));
           }
         },
       ),
