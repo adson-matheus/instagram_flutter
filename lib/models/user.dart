@@ -128,8 +128,9 @@ Future<bool> checkIfEmailExists(String userEmail) async {
 
 Future<void> deleteUser(int id) async {
   final db = await databaseCreate();
-  db.delete('User', where: 'id = ?', whereArgs: [id]);
-  db.delete('Picture', where: 'userId = ?', whereArgs: [id]);
+  await db.delete('User', where: 'id = ?', whereArgs: [id]);
+  await db.delete('Picture', where: 'userId = ?', whereArgs: [id]);
+  await db.delete('Followers', where: 'userId = ?', whereArgs: [id]);
 }
 
 Future<Database> databaseCreate() async {
@@ -159,6 +160,16 @@ Future<Database> databaseCreate() async {
           picture BLOB,
           FOREIGN KEY(userId) REFERENCES User(id));
           """);
+      //followers as List with id's
+      //stored as String
+      await db.execute("""
+          CREATE TABLE IF NOT EXISTS Followers
+          (id INTEGER PRIMARY KEY,
+          userId INTEGER NOT NULL,
+          followers TEXT,
+          FOREIGN KEY(userId) REFERENCES User(id),
+          FOREIGN KEY(followers) REFERENCES User(followers));
+          """);
     },
   );
   return database;
@@ -171,9 +182,9 @@ Future<void> drop() async {
     join(await getDatabasesPath(), 'instagram.db'),
     version: 1,
     onOpen: (db) async {
-      await db.execute("""
-          DROP TABLE IF EXISTS User
-          """);
+      await db.execute("DROP TABLE IF EXISTS User");
+      await db.execute("DROP TABLE IF EXISTS Picture");
+      await db.execute("DROP TABLE IF EXISTS Followers");
     },
   );
 }
