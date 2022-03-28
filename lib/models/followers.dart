@@ -2,12 +2,10 @@ import 'package:instagram_flutter/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Followers {
-  final int? id;
   final int userId;
   final String followers;
 
   Followers({
-    this.id,
     required this.userId,
     required this.followers,
   });
@@ -23,7 +21,6 @@ class Followers {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'userId': userId,
       'followers': followers,
     };
@@ -31,25 +28,47 @@ class Followers {
 
   Future<void> update() async {
     final db = await databaseCreate();
-    await db.update('Followers', toMap(), where: 'id = ?', whereArgs: [id]);
+    await db
+        .update('Followers', toMap(), where: 'userId = ?', whereArgs: [userId]);
   }
+}
+
+Future<void> defaultFollowers(int userId) async {
+  final f = Followers(
+    userId: userId,
+    followers: '',
+  );
+  await f.addFollower();
+}
+
+Future<Map<String, dynamic>> getFollowersList(int userId) async {
+  var db = await databaseCreate();
+  final followers = await db.query(
+    'Followers',
+    where: 'userId = ?',
+    whereArgs: [userId],
+    columns: ['followers'],
+  );
+  return followers.first;
 }
 
 Future<Map<String, dynamic>> follow(
     Map<String, dynamic> user, int loggedUserId) async {
-  //add follower++
   final Map<String, dynamic>? thisUser =
       await getUserByUsername(user['username']);
   final Map<String, dynamic> updatedUser = Map.from(user);
+
   updatedUser['email'] = thisUser!['email'];
   updatedUser['password'] = thisUser['password'];
   updatedUser['followers']++;
   await fromMap(updatedUser).update();
 
+  //get followers list
+  final followersList = await getFollowersList(user['id']);
   //add id to followers' list
-  Followers newFollow =
-      Followers(userId: loggedUserId, followers: '[$loggedUserId]');
-  newFollow.addFollower();
+  final String f = followersList['followers'] + ' $loggedUserId,';
+  Followers newFollow = Followers(userId: user['id'], followers: f);
+  await newFollow.update();
 
   return updatedUser;
 }
@@ -57,11 +76,17 @@ Future<Map<String, dynamic>> follow(
 Future<List<Map<String, dynamic>>?> getFollowersFromUser(int id) async {
   final db = await databaseCreate();
 
+  final List<Map<String, dynamic>> listFollowers = await db.rawQuery("""
+      SELECT f.followers
+      FROM Followers f
+      WHERE f.userId = $id
+  """);
+
   final List<Map<String, dynamic>> list = await db.rawQuery("""
       SELECT u.id, u.name, u.username, u.followers, u.following, u.totalPubs, p.picture
-      FROM User u, Picture p, Followers f
+      FROM User u, Picture p
       WHERE u.id = p.userId
-      AND u.id = f.userId
+      AND u.id IN (${listFollowers.first['followers']} 0);
   """);
   if (list.isEmpty) {
     return null;
