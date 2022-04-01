@@ -52,6 +52,28 @@ Future<Map<String, dynamic>> getFollowersList(int userId) async {
   return followers.first;
 }
 
+Future<bool> isFollowing(int userId, int loggedUserId) async {
+  var db = await databaseCreate();
+  final followers = await db.query(
+    'Followers',
+    columns: ['followers'],
+    where: 'userId = ?',
+    whereArgs: [userId],
+  );
+  final followingOrNot = await db.rawQuery("""
+    SELECT *
+    FROM Followers
+    WHERE userId = $userId
+    AND $loggedUserId IN (${followers.first['followers']} 0);
+  """);
+
+  if (followingOrNot.isEmpty) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 Future<Map<String, dynamic>> follow(
     Map<String, dynamic> user, int loggedUserId) async {
   final Map<String, dynamic>? thisUser =
