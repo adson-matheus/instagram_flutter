@@ -88,46 +88,44 @@ class _VisitProfileWidgetState extends State<VisitProfileWidget> {
             ],
           ),
           Padding(
-              padding: const EdgeInsets.only(
-                top: 12.0,
-                right: 10.0,
-                left: 10.0,
-              ),
-              child: SizedBox(
-                  child: loggedUserIsFollowing
-                      ? OutlinedButton(
-                          child: const Text(
-                            'Seguindo',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () async {
-                            //TODO #19 Deixar de Seguir (Unfollow)
-                          },
-                        )
-                      : ElevatedButton(
-                          child: const Text(
-                            'Seguir',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.all(Colors.blue)),
-                          onPressed: () async {
-                            final updated = await follow(
-                              user,
-                              loggedUserId,
-                            );
-                            setState(() {
-                              user = updated;
-                              loggedUserIsFollowing = !loggedUserIsFollowing;
-                            });
-                          },
-                        ))),
-          // IsFollowingWidget(
-          //   loggedUserId: loggedUserId,
-          //   user: user,
-          //   loggedUserIsFollowing: loggedUserIsFollowing,
-          // ),
+            padding: const EdgeInsets.only(
+              top: 12.0,
+              right: 10.0,
+              left: 10.0,
+            ),
+            child: SizedBox(
+              child: loggedUserIsFollowing
+                  ? OutlinedButton(
+                      child: const Text(
+                        'Seguindo',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () async {
+                        //TODO #19 Deixar de Seguir (Unfollow)
+                      },
+                    )
+                  : ElevatedButton(
+                      child: const Text(
+                        'Seguir',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.blue)),
+                      onPressed: () async {
+                        final updated = await follow(
+                          user,
+                          loggedUserId,
+                        );
+                        setState(() {
+                          user = updated;
+                          // loggedUserIsFollowing = !loggedUserIsFollowing;
+                          loggedUserIsFollowing = true;
+                        });
+                      },
+                    ),
+            ),
+          ),
           const ProfileStories(),
           AppBarProfile(),
         ],
