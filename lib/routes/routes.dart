@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/account/new_user.dart';
-import 'package:instagram_flutter/account/visit_profile.dart';
+import 'package:instagram_flutter/index/visit_profile/visit_profile.dart';
 import 'package:instagram_flutter/controller/get_followers.dart';
 import 'package:instagram_flutter/index/main.dart';
 import 'package:instagram_flutter/index/profile/profile_edit.dart';
