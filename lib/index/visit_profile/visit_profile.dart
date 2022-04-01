@@ -89,7 +89,7 @@ class _VisitProfileWidgetState extends State<VisitProfileWidget> {
               right: 10.0,
               left: 10.0,
             ),
-            child: IsFollowing(
+            child: IsFollowingWidget(
               loggedUserId: loggedUserId,
               user: user,
             ),
