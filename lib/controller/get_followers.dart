@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/models/followers.dart';
 
-class GetFollowersFromUser extends StatefulWidget {
+class GetFollowersFromUserWidget extends StatefulWidget {
   final int userId;
   final int loggedUserId;
-  const GetFollowersFromUser({
+  const GetFollowersFromUserWidget({
     Key? key,
     required this.userId,
     required this.loggedUserId,
   }) : super(key: key);
 
   @override
-  State<GetFollowersFromUser> createState() => _GetFollowersFromUserState();
+  State<GetFollowersFromUserWidget> createState() =>
+      _GetFollowersFromUserWidgetState();
 }
 
-class _GetFollowersFromUserState extends State<GetFollowersFromUser> {
+class _GetFollowersFromUserWidgetState
+    extends State<GetFollowersFromUserWidget> {
   late int userId;
   late int loggedUserId;
 

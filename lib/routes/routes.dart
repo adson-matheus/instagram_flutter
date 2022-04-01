@@ -51,7 +51,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       final userId = args[0];
       final loggedUserId = args[1];
       return MaterialPageRoute(
-          builder: (_) => GetFollowersFromUser(
+          builder: (_) => GetFollowersFromUserWidget(
                 userId: userId,
                 loggedUserId: loggedUserId,
               ));
