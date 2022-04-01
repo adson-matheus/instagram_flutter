@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/followers.dart';
 import 'package:instagram_flutter/models/user.dart';
 
 class WillPopeScopeExitApp extends StatelessWidget {
@@ -219,8 +220,12 @@ class _ListUsersReusableState extends State<ListUsersReusable> {
         style: ListTileStyle.list,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         horizontalTitleGap: 10,
-        onTap: () => Navigator.of(context).pushNamed('/visit_profile',
-            arguments: [content[index], loggedUserId]),
+        onTap: () async {
+          final bool loggedUserIsFollowing =
+              await isFollowing(content[index]['id'], loggedUserId);
+          Navigator.of(context).pushNamed('/visit_profile',
+              arguments: [content[index], loggedUserId, loggedUserIsFollowing]);
+        },
       ),
     );
   }
