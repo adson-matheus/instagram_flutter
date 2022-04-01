@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:instagram_flutter/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -91,6 +93,41 @@ Future<Map<String, dynamic>> follow(
   final String f = followersList['followers'] + ' $loggedUserId,';
   Followers newFollow = Followers(userId: user['id'], followers: f);
   await newFollow.update();
+
+  return updatedUser;
+}
+
+Future<Map<String, dynamic>> unfollow(
+    Map<String, dynamic> user, int loggedUserId) async {
+  final Map<String, dynamic>? thisUser =
+      await getUserByUsername(user['username']);
+
+  final Map<String, dynamic> updatedUser = Map.from(user);
+
+  updatedUser['email'] = thisUser!['email'];
+  updatedUser['password'] = thisUser['password'];
+  updatedUser['followers']--;
+  await fromMap(updatedUser).update();
+
+  final followersList = await getFollowersList(user['id']);
+
+  //string to list
+  var f = json.decode('[' + followersList['followers'] + '0' + ']') as List;
+  //remove follower from followersList
+  f.remove(loggedUserId);
+
+  //list to string
+  String backToString = '';
+  for (int follower in f) {
+    if (follower != 0) {
+      backToString = backToString + '$follower,';
+    }
+  }
+  Followers newFollow = Followers(
+    userId: user['id'],
+    followers: backToString,
+  );
+  newFollow.update();
 
   return updatedUser;
 }
