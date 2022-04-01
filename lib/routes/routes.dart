@@ -41,10 +41,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       final args = settings.arguments as List<Object>;
       final user = args[0] as Map<String, dynamic>;
       final loggedUserId = args[1] as int;
+      final loggedUserIsFollowing = args[2] as bool;
       return MaterialPageRoute(
           builder: (_) => VisitProfileWidget(
                 user: user,
                 loggedUserId: loggedUserId,
+                loggedUserIsFollowing: loggedUserIsFollowing,
               ));
     case '/get_followers_from_user':
       final args = settings.arguments as List<int>;
