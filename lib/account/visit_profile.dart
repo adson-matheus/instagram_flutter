@@ -84,37 +84,25 @@ class _VisitProfileWidgetState extends State<VisitProfileWidget> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.75,
-                  child: ElevatedButton(
-                      child: const Text(
-                        'Seguir',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all(Colors.blue)),
-                      onPressed: () async {
-                        final updated = await follow(user, loggedUserId);
-                        setState(() {
-                          user = updated;
-                        });
-                      }),
-                ),
-                ElevatedButton(
-                  child: const Icon(
-                    Icons.person_add,
-                    color: Colors.white,
+            padding: const EdgeInsets.only(
+              top: 12.0,
+              right: 10.0,
+              left: 10.0,
+            ),
+            child: SizedBox(
+              child: ElevatedButton(
+                  child: const Text(
+                    'Seguir',
+                    style: TextStyle(color: Colors.white),
                   ),
                   style: ButtonStyle(
                       foregroundColor: MaterialStateProperty.all(Colors.blue)),
-                  onPressed: () {},
-                ),
-              ],
+                  onPressed: () async {
+                    final updated = await follow(user, loggedUserId);
+                    setState(() {
+                      user = updated;
+                    });
+                  }),
             ),
           ),
           const ProfileStories(),
