@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/followers.dart';
 import 'package:instagram_flutter/models/profile_picture.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -30,6 +31,7 @@ class User {
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     await defaultProfilePicture(id);
+    await defaultFollowers(id);
   }
 
   Map<String, dynamic> toMap() {
@@ -49,6 +51,19 @@ class User {
     final db = await databaseCreate();
     await db.update('User', toMap(), where: 'id = ?', whereArgs: [id]);
   }
+}
+
+User fromMap(user) {
+  return User(
+    id: user['id'],
+    name: user['name'],
+    username: user['username'],
+    password: user['password'],
+    email: user['email'],
+    followers: user['followers'],
+    following: user['following'],
+    totalPubs: user['totalPubs'],
+  );
 }
 
 Future<Map<String, dynamic>> getUserById(int id) async {
@@ -115,8 +130,9 @@ Future<bool> checkIfEmailExists(String userEmail) async {
 
 Future<void> deleteUser(int id) async {
   final db = await databaseCreate();
-  db.delete('User', where: 'id = ?', whereArgs: [id]);
-  db.delete('Picture', where: 'userId = ?', whereArgs: [id]);
+  await db.delete('User', where: 'id = ?', whereArgs: [id]);
+  await db.delete('Picture', where: 'userId = ?', whereArgs: [id]);
+  await db.delete('Followers', where: 'userId = ?', whereArgs: [id]);
 }
 
 Future<Database> databaseCreate() async {
@@ -146,6 +162,16 @@ Future<Database> databaseCreate() async {
           picture BLOB,
           FOREIGN KEY(userId) REFERENCES User(id));
           """);
+      //followers as List with id's
+      //stored as String
+      await db.execute("""
+          CREATE TABLE IF NOT EXISTS Followers
+          (id INTEGER PRIMARY KEY,
+          userId INTEGER NOT NULL,
+          followers TEXT,
+          FOREIGN KEY(userId) REFERENCES User(id),
+          FOREIGN KEY(followers) REFERENCES User(followers));
+          """);
     },
   );
   return database;
@@ -158,9 +184,9 @@ Future<void> drop() async {
     join(await getDatabasesPath(), 'instagram.db'),
     version: 1,
     onOpen: (db) async {
-      await db.execute("""
-          DROP TABLE IF EXISTS User
-          """);
+      await db.execute("DROP TABLE IF EXISTS User");
+      await db.execute("DROP TABLE IF EXISTS Picture");
+      await db.execute("DROP TABLE IF EXISTS Followers");
     },
   );
 }

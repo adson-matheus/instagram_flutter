@@ -3,7 +3,9 @@ import 'package:instagram_flutter/models/user.dart';
 import 'list_users_from_search.dart';
 
 class SearchPageWidget extends StatefulWidget {
-  const SearchPageWidget({Key? key}) : super(key: key);
+  final int loggedUserId;
+  const SearchPageWidget({Key? key, required this.loggedUserId})
+      : super(key: key);
 
   @override
   State<SearchPageWidget> createState() => _SearchPageWidgetState();
@@ -39,7 +41,12 @@ class _SearchPageWidgetState extends State<SearchPageWidget> {
             },
           ),
         ),
-        if (showList) Expanded(child: ListUsersFromSearchWidget(users: users))
+        if (showList)
+          Expanded(
+              child: ListUsersFromSearchWidget(
+            users: users,
+            loggedUserId: widget.loggedUserId,
+          ))
       ],
     );
   }

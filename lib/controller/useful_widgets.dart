@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/followers.dart';
 import 'package:instagram_flutter/models/user.dart';
 
 class WillPopeScopeExitApp extends StatelessWidget {
@@ -38,12 +39,12 @@ class PaddingWithColumn extends StatelessWidget {
   const PaddingWithColumn({Key? key, required this.number, required this.text})
       : super(key: key);
 
-  final _textStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+  final _textStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 14);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(3.0),
       child: Column(
         children: <Widget>[
           Text(
@@ -158,6 +159,74 @@ class FormFieldWithPadding extends StatelessWidget {
                       }
                       return null;
                     }),
+    );
+  }
+}
+
+class ListUsersReusable extends StatefulWidget {
+  final List<Map<String, dynamic>> content;
+  final int index;
+  final int loggedUserId;
+  const ListUsersReusable({
+    Key? key,
+    required this.content,
+    required this.index,
+    required this.loggedUserId,
+  }) : super(key: key);
+
+  @override
+  State<ListUsersReusable> createState() => _ListUsersReusableState();
+}
+
+class _ListUsersReusableState extends State<ListUsersReusable> {
+  late List<Map<String, dynamic>> content;
+  late int index;
+  late int loggedUserId;
+  @override
+  void initState() {
+    super.initState();
+    content = widget.content;
+    index = widget.index;
+    loggedUserId = widget.loggedUserId;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        leading: SizedBox(
+          width: 56,
+          height: 100,
+          child: ClipOval(
+            child: Image.memory(
+              content[index]['picture'],
+              width: 327,
+              height: 327,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        title: Text(
+          content[index]['username'],
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          content[index]['name'],
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        contentPadding: EdgeInsets.zero,
+        style: ListTileStyle.list,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        horizontalTitleGap: 10,
+        onTap: () async {
+          final bool loggedUserIsFollowing =
+              await isFollowing(content[index]['id'], loggedUserId);
+          Navigator.of(context).pushNamed('/visit_profile',
+              arguments: [content[index], loggedUserId, loggedUserIsFollowing]);
+        },
+      ),
     );
   }
 }
