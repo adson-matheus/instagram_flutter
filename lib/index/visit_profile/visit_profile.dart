@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/index/profile/profile_appbar.dart';
 import 'package:instagram_flutter/index/profile/profile_stories.dart';
-import 'package:instagram_flutter/models/followers.dart';
+import 'package:instagram_flutter/index/visit_profile/follow_button.dart';
 
 class VisitProfileWidget extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -89,20 +89,9 @@ class _VisitProfileWidgetState extends State<VisitProfileWidget> {
               right: 10.0,
               left: 10.0,
             ),
-            child: SizedBox(
-              child: ElevatedButton(
-                  child: const Text(
-                    'Seguir',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(Colors.blue)),
-                  onPressed: () async {
-                    final updated = await follow(user, loggedUserId);
-                    setState(() {
-                      user = updated;
-                    });
-                  }),
+            child: IsFollowing(
+              loggedUserId: loggedUserId,
+              user: user,
             ),
           ),
           const ProfileStories(),
