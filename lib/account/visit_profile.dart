@@ -20,6 +20,9 @@ class VisitProfileWidget extends StatefulWidget {
 class _VisitProfileWidgetState extends State<VisitProfileWidget> {
   late Map<String, dynamic> user;
   late int loggedUserId;
+  final ButtonStyle buttonStyle = ButtonStyle(
+    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+  );
 
   @override
   void initState() {
@@ -61,13 +64,18 @@ class _VisitProfileWidgetState extends State<VisitProfileWidget> {
                   PaddingWithColumn(
                       number: user['totalPubs'], text: 'Publicações'),
                   TextButton(
-                    onPressed: () => Navigator.of(context)
-                        .pushNamed('/get_followers_from_user', arguments: [
-                      user['id'] as int,
-                      loggedUserId,
-                    ]),
                     child: PaddingWithColumn(
                         number: user['followers'], text: 'Seguidores'),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        '/get_followers_from_user',
+                        arguments: [
+                          user['id'] as int,
+                          loggedUserId,
+                        ],
+                      );
+                    },
+                    style: buttonStyle,
                   ),
                   PaddingWithColumn(
                       number: user['following'], text: 'Seguindo'),
