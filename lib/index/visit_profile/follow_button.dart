@@ -42,7 +42,9 @@ class _IsFollowingWidgetState extends State<IsFollowingWidget> {
                     'Seguindo',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () async {},
+                  onPressed: () async {
+                    //TODO #19 Deixar de Seguir (Unfollow)
+                  },
                 ),
               );
             } else {
