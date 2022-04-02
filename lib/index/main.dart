@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
+import 'package:instagram_flutter/index/init/view_posts.dart';
 import 'package:instagram_flutter/index/post_picture/post_picture.dart';
 import 'package:instagram_flutter/index/profile/profile.dart';
 import 'package:instagram_flutter/index/search/search.dart';
@@ -142,7 +143,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
     ];
 
     final List<Widget> _widgetOptions = <Widget>[
-      const Text('Início'),
+      ViewPostsWidget(user: widget.user),
       SearchPageWidget(loggedUserId: widget.user['id']),
       PostPictureWidget(loggedUserId: widget.user['id']),
       const Text('Loja'),
