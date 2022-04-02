@@ -101,7 +101,6 @@ class _VisitProfileWidgetState extends State<VisitProfileWidget> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        //TODO #19 Deixar de Seguir (Unfollow)
                         final updated = await unfollow(user, loggedUserId);
                         setState(() {
                           user = updated;
