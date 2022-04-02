@@ -42,6 +42,20 @@ class PostPicture {
   }
 }
 
+Future<List<Map<String, dynamic>>?> getPosts(int loggedUserId) async {
+  final db = await databaseCreate();
+  final List<Map<String, Object?>> posts = await db.query(
+    'PostPicture',
+    where: 'userId = ?',
+    whereArgs: [loggedUserId],
+  );
+  if (posts.isEmpty) {
+    return null;
+  } else {
+    return posts.reversed.toList();
+  }
+}
+
 Future<void> postNewPicture(int loggedUserId) async {
   final XFile? img = await ImagePicker().pickImage(
     source: ImageSource.camera,
