@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
+import 'package:instagram_flutter/index/post_picture/post_picture.dart';
 import 'package:instagram_flutter/index/profile/profile.dart';
 import 'package:instagram_flutter/index/search/search.dart';
 import 'package:instagram_flutter/index/profile/profile_bottom_sheet.dart';
@@ -38,7 +39,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
     const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Início'),
     const BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Pesquisar'),
     const BottomNavigationBarItem(
-        icon: Icon(Icons.play_circle), label: 'Reels'),
+        icon: Icon(Icons.add_circle_outline), label: 'Postar'),
     const BottomNavigationBarItem(
         icon: Icon(Icons.shopping_bag_outlined), label: 'Loja'),
     const BottomNavigationBarItem(
@@ -49,54 +50,92 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
   Widget build(BuildContext context) {
     final List<AppBar> _appBarOptions = <AppBar>[
       AppBar(
-        title: const Text('Instagram',
-            style: TextStyle(fontFamily: 'Lobster-Regular')),
+        title: const Text(
+          'Instagram',
+          style: TextStyle(fontFamily: 'Lobster-Regular'),
+        ),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+            onPressed: () {},
+            icon: const Icon(Icons.add_box_outlined),
+          ),
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.message_outlined)),
+            onPressed: () {},
+            icon: const Icon(Icons.favorite_border),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.message_outlined),
+          ),
         ],
       ),
       AppBar(
-        title: const Text('Instagram',
-            style: TextStyle(fontFamily: 'Lobster-Regular')),
+        title: const Text(
+          'Instagram',
+          style: TextStyle(fontFamily: 'Lobster-Regular'),
+        ),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+            onPressed: () {},
+            icon: const Icon(Icons.add_box_outlined),
+          ),
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.message_outlined)),
+            onPressed: () {},
+            icon: const Icon(Icons.favorite_border),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.message_outlined),
+          ),
         ],
       ),
       AppBar(
-        title: const Text('Instagram',
-            style: TextStyle(fontFamily: 'Lobster-Regular')),
+        title: const Text(
+          'Instagram',
+          style: TextStyle(fontFamily: 'Lobster-Regular'),
+        ),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+            onPressed: () {},
+            icon: const Icon(Icons.add_box_outlined),
+          ),
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.message_outlined)),
+            onPressed: () {},
+            icon: const Icon(Icons.favorite_border),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.message_outlined),
+          ),
         ],
       ),
       AppBar(
-        title: const Text('Instagram',
-            style: TextStyle(fontFamily: 'Lobster-Regular')),
+        title: const Text(
+          'Instagram',
+          style: TextStyle(fontFamily: 'Lobster-Regular'),
+        ),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+            onPressed: () {},
+            icon: const Icon(Icons.add_box_outlined),
+          ),
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.message_outlined)),
+            onPressed: () {},
+            icon: const Icon(Icons.favorite_border),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.message_outlined),
+          ),
         ],
       ),
       AppBar(
         title: Text(widget.user['username']),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
+            onPressed: () {},
+            icon: const Icon(Icons.add_box_outlined),
+          ),
           ShowBottomSheet(id: widget.user['id']),
         ],
       ),
@@ -105,7 +144,7 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
     final List<Widget> _widgetOptions = <Widget>[
       const Text('Início'),
       SearchPageWidget(loggedUserId: widget.user['id']),
-      const Text('Reels'),
+      PostPictureWidget(loggedUserId: widget.user['id']),
       const Text('Loja'),
       //ProfileWidget(user: widget.user, profilePicture: profilePicture),
     ];
@@ -137,9 +176,13 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
               ),
             ));
           } else {
-            return const Padding(
-              padding: EdgeInsets.all(24.0),
-              child: CircularProgressIndicator(),
+            return const Scaffold(
+              body: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(24.0),
+                  child: CircularProgressIndicator(),
+                ),
+              ),
             );
           }
         });
