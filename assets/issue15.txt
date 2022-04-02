@@ -17,7 +17,7 @@ torna uma pub unica pelo id
 listWhoLiked = lista de ids, ao clicar em curtidas mostrar o perfil de todos que deram like
 
 class Comments
-	int idPub
+	int id
 	Map<int (id), String (comentario)> comments
 
 comments = {
