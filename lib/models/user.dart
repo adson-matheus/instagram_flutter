@@ -179,14 +179,13 @@ Future<Database> databaseCreate() async {
           picture BLOB NOT NULL,
           caption TEXT,
           listWhoLiked TEXT,
-          comments INTEGER AUTOINCREMENT,
           date TEXT,
-          FOREIGN KEY (userId) REFERENCES User(id),
-          FOREIGN KEY (comments) REFERENCES Comment(id));
+          FOREIGN KEY (userId) REFERENCES User(id));
           """);
       await db.execute("""
         CREATE TABLE IF NOT EXISTS Comment
         (id INTEGER PRIMARY KEY,
+        idPost INTEGER,
         comments TEXT NOT NULL);
         """);
     },
@@ -204,6 +203,8 @@ Future<void> drop() async {
       await db.execute("DROP TABLE IF EXISTS User");
       await db.execute("DROP TABLE IF EXISTS Picture");
       await db.execute("DROP TABLE IF EXISTS Followers");
+      await db.execute("DROP TABLE IF EXISTS PostPicture");
+      await db.execute("DROP TABLE IF EXISTS Comment");
     },
   );
 }
