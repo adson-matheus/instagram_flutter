@@ -172,6 +172,23 @@ Future<Database> databaseCreate() async {
           FOREIGN KEY(userId) REFERENCES User(id),
           FOREIGN KEY(followers) REFERENCES User(followers));
           """);
+      await db.execute("""
+          CREATE TABLE IF NOT EXISTS PostPicture
+          (id INTEGER PRIMARY KEY,
+          userId INTEGER NOT NULL,
+          picture BLOB NOT NULL,
+          caption TEXT,
+          listWhoLiked TEXT,
+          comments INTEGER AUTOINCREMENT,
+          date TEXT,
+          FOREIGN KEY (userId) REFERENCES User(id),
+          FOREIGN KEY (comments) REFERENCES Comment(id));
+          """);
+      await db.execute("""
+        CREATE TABLE IF NOT EXISTS Comment
+        (id INTEGER PRIMARY KEY,
+        comments TEXT NOT NULL);
+        """);
     },
   );
   return database;
