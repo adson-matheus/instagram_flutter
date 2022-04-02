@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:instagram_flutter/controller/useful_widgets.dart';
 import 'package:instagram_flutter/models/user.dart';
 
@@ -16,18 +15,6 @@ class _NewUserState extends State<NewUser> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
-
-  //envia uma mensagem usando o gmail
-  //nao eh exatamente o que quero
-  Future<void> sendEmail() async {
-    Email email = Email(
-        recipients: [_email.text],
-        subject: 'Olá, ${_name.text}',
-        body: 'Bem vindo ao Instagram Flutter!',
-        isHTML: false);
-
-    await FlutterEmailSender.send(email);
-  }
 
   Future<void> newUser() async {
     User user = User(
