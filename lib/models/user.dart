@@ -133,6 +133,9 @@ Future<void> deleteUser(int id) async {
   await db.delete('User', where: 'id = ?', whereArgs: [id]);
   await db.delete('Picture', where: 'userId = ?', whereArgs: [id]);
   await db.delete('Followers', where: 'userId = ?', whereArgs: [id]);
+  await db.delete('PostPicture', where: 'userId = ?', whereArgs: [id]);
+  //add userId to Comment table
+  //await db.delete('Comment', where: 'userId = ?', whereArgs: [id]);
 }
 
 Future<Database> databaseCreate() async {
