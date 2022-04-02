@@ -1,0 +1,30 @@
+quando clicar no +, deve aparecer a câmera aberta pra tirar a foto...
+deve ter um botão de capturar a foto, depois de capturar aí aparece pra postar no feed pelo menos
+ignorar salvar, ignorar postar no story, ignorar filtros
+somente descartar ou postar no feed por enquanto, somente 1 foto
+
+class PostPicture
+	int id
+	int idUser
+	Uint8list picture
+	String caption
+	Datetime date
+	List<int> listWhoLiked
+	Comments comments
+
+pegar todas as publicações de um user pelo idUser
+torna uma pub unica pelo id
+listWhoLiked = lista de ids, ao clicar em curtidas mostrar o perfil de todos que deram like
+
+class Comments
+	int idPub
+	Map<int (id), String (comentario)> comments
+
+comments = {
+	1: 'gostei'
+	2: 'toma meu like fera'
+}
+
+embaixo da foto mostra a quantidade de fotos, ao clicar nesse texto deve abrir os comentarios...
+e abrir o teclado automaticamente para que possa comentar também
+	
