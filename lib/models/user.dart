@@ -73,6 +73,7 @@ Future<Map<String, dynamic>> getUserById(int id) async {
         'id',
         'name',
         'username',
+        'password',
         'email',
         'followers',
         'following',

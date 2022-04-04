@@ -30,11 +30,15 @@ class _PostPictureWidgetState extends State<PostPictureWidget> {
 
         //posts count++
         final user = await getUserById(loggedUserId);
-        // user['totalPubs']++;
-        // fromMap(user).update();
+        final Map<String, dynamic> updatedUser = Map.from(user);
+        updatedUser['totalPubs']++;
+        fromMap(updatedUser).update();
 
         //back to index
-        Navigator.of(context).popAndPushNamed('/index', arguments: [user, 0]);
+        Navigator.of(context).popAndPushNamed(
+          '/index',
+          arguments: [updatedUser, 0],
+        );
       },
     );
   }
