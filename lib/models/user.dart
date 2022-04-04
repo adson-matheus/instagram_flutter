@@ -134,8 +134,7 @@ Future<void> deleteUser(int id) async {
   await db.delete('Picture', where: 'userId = ?', whereArgs: [id]);
   await db.delete('Followers', where: 'userId = ?', whereArgs: [id]);
   await db.delete('PostPicture', where: 'userId = ?', whereArgs: [id]);
-  //add userId to Comment table
-  //await db.delete('Comment', where: 'userId = ?', whereArgs: [id]);
+  await db.delete('Comment', where: 'userId = ?', whereArgs: [id]);
 }
 
 Future<Database> databaseCreate() async {
@@ -188,8 +187,9 @@ Future<Database> databaseCreate() async {
       await db.execute("""
         CREATE TABLE IF NOT EXISTS Comment
         (id INTEGER PRIMARY KEY,
+        userId INTEGER,
         idPost INTEGER,
-        comments TEXT NOT NULL);
+        comments TEXT);
         """);
     },
   );
