@@ -32,9 +32,9 @@ class PostPicture {
     };
   }
 
-  newPost() async {
+  Future<int> newPost() async {
     final db = await databaseCreate();
-    await db.insert(
+    return await db.insert(
       'PostPicture',
       toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -56,11 +56,11 @@ Future<List<Map<String, dynamic>>?> getPosts(int loggedUserId) async {
   }
 }
 
-Future<void> postNewPicture(int loggedUserId) async {
+Future<bool?> postNewPicture(int loggedUserId) async {
   final XFile? img = await ImagePicker().pickImage(
     source: ImageSource.camera,
   );
-  if (img == null) return;
+  if (img == null) return null;
 
   var bytes = await img.readAsBytes();
 
@@ -69,13 +69,14 @@ Future<void> postNewPicture(int loggedUserId) async {
     picture: bytes,
     date: DateTime.now(),
   );
-  postPicture.newPost();
+  final newId = await postPicture.newPost();
 
   Comment comment = Comment(
-    idPost: postPicture.userId,
-    comments: {},
+    idPost: newId,
+    userId: postPicture.userId,
   );
   comment.comment();
+  return true;
 }
 
 //////////////Comment
@@ -83,18 +84,21 @@ Future<void> postNewPicture(int loggedUserId) async {
 class Comment {
   final int? id;
   final int idPost;
-  final Map<int, String> comments;
+  final int userId;
+  final Map<int, String>? comments;
 
   Comment({
     this.id,
     required this.idPost,
-    required this.comments,
+    required this.userId,
+    this.comments,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'idPost': idPost,
+      'userId': userId,
       'comments': comments,
     };
   }
