@@ -6,10 +6,14 @@ import 'package:instagram_flutter/index/profile/profile_stories.dart';
 class ProfilePageWidget extends StatelessWidget {
   final Map<String, dynamic> user;
   final Map<String, dynamic> profilePicture;
+  final List<Map<String, dynamic>>? posts;
 
-  const ProfilePageWidget(
-      {Key? key, required this.user, required this.profilePicture})
-      : super(key: key);
+  const ProfilePageWidget({
+    Key? key,
+    required this.user,
+    required this.profilePicture,
+    required this.posts,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +75,10 @@ class ProfilePageWidget extends StatelessWidget {
           ),
         ),
         const ProfileStories(),
-        AppBarProfile(),
+        AppBarProfile(
+          loggedUserId: user['id'],
+          posts: posts,
+        ),
       ],
     );
   }

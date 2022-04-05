@@ -10,9 +10,14 @@ import 'package:instagram_flutter/models/profile_picture.dart';
 class BottomNavigationBarIndex extends StatefulWidget {
   final Map<String, dynamic> user;
   final int? selectBody;
-  const BottomNavigationBarIndex(
-      {Key? key, required this.user, this.selectBody})
-      : super(key: key);
+  final List<Map<String, dynamic>>? posts;
+
+  const BottomNavigationBarIndex({
+    Key? key,
+    required this.user,
+    this.selectBody,
+    this.posts,
+  }) : super(key: key);
 
   @override
   State<BottomNavigationBarIndex> createState() =>
@@ -162,7 +167,10 @@ class _BottomNavigationBarIndexState extends State<BottomNavigationBarIndex> {
                 height: MediaQuery.of(context).size.height,
                 child: _currentBody == 4
                     ? ProfilePageWidget(
-                        user: widget.user, profilePicture: snapshot.data!)
+                        user: widget.user,
+                        profilePicture: snapshot.data!,
+                        posts: widget.posts,
+                      )
                     : _widgetOptions.elementAt(_currentBody),
               ),
               bottomNavigationBar: BottomNavigationBar(

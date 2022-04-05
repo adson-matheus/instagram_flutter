@@ -131,7 +131,10 @@ class _VisitProfileWidgetState extends State<VisitProfileWidget> {
             ),
           ),
           const ProfileStories(),
-          AppBarProfile(),
+          AppBarProfile(
+            loggedUserId: user['id'],
+            posts: [],
+          ),
         ],
       ),
     );
