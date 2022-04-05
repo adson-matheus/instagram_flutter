@@ -56,11 +56,11 @@ Future<List<Map<String, dynamic>>?> getPosts(int loggedUserId) async {
   }
 }
 
-Future<bool?> postNewPicture(int loggedUserId) async {
+Future<bool> postNewPicture(int loggedUserId) async {
   final XFile? img = await ImagePicker().pickImage(
     source: ImageSource.camera,
   );
-  if (img == null) return null;
+  if (img == null) return false;
 
   var bytes = await img.readAsBytes();
 

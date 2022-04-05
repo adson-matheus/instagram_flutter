@@ -26,19 +26,21 @@ class _PostPictureWidgetState extends State<PostPictureWidget> {
     return TextButton(
       child: const Text('Postar Foto'),
       onPressed: () async {
-        await postNewPicture(loggedUserId);
+        final bool isPosted = await postNewPicture(loggedUserId);
 
-        //posts count++
-        final user = await getUserById(loggedUserId);
-        final Map<String, dynamic> updatedUser = Map.from(user);
-        updatedUser['totalPubs']++;
-        fromMap(updatedUser).update();
+        if (isPosted) {
+          //posts count++
+          final user = await getUserById(loggedUserId);
+          final Map<String, dynamic> updatedUser = Map.from(user);
+          updatedUser['totalPubs']++;
+          fromMap(updatedUser).update();
 
-        //back to index
-        Navigator.of(context).popAndPushNamed(
-          '/index',
-          arguments: [updatedUser, 0],
-        );
+          //back to index
+          Navigator.of(context).popAndPushNamed(
+            '/index',
+            arguments: [updatedUser, 0],
+          );
+        }
       },
     );
   }
