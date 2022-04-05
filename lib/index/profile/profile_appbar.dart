@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AppBarProfile extends StatelessWidget {
-  AppBarProfile({Key? key}) : super(key: key);
+class AppBarProfile extends StatefulWidget {
+  const AppBarProfile({Key? key}) : super(key: key);
 
+  @override
+  State<AppBarProfile> createState() => _AppBarProfileState();
+}
+
+class _AppBarProfileState extends State<AppBarProfile> {
   final List<Tab> _tab = const <Tab>[
     Tab(
       icon: Icon(Icons.grid_4x4),
@@ -13,7 +18,17 @@ class AppBarProfile extends StatelessWidget {
   ];
 
   final _tabBarView = <Widget>[
-    const Center(child: Text('Perfil')),
+    GridView.count(
+      crossAxisCount: 3,
+      children: const [
+        Text('data'),
+        Text('data'),
+        Text('data'),
+        Text('data'),
+        Text('data'),
+        Text('data'),
+      ],
+    ),
     Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
@@ -23,7 +38,7 @@ class AppBarProfile extends StatelessWidget {
         ),
         Text('Fotos marcadas'),
       ],
-    )
+    ),
   ];
 
   @override
