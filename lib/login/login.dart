@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/post_picture.dart';
 import 'package:instagram_flutter/models/user.dart';
 
 class LoginPage extends StatefulWidget {
@@ -89,43 +90,47 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                        minimumSize: MaterialStateProperty.all<Size>(
-                            const Size(double.infinity, 50))),
-                    child: const Text(
-                      'Entrar',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        final Map<String, dynamic>? user =
-                            await getUserByUsername(_username.text);
-                        user == null
-                            ? ScaffoldMessenger.of(context).showSnackBar(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.blue),
+                            minimumSize: MaterialStateProperty.all<Size>(
+                                const Size(double.infinity, 50))),
+                        child: const Text(
+                          'Entrar',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            final Map<String, dynamic>? user =
+                                await getUserByUsername(_username.text);
+                            if (user == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                    duration: const Duration(seconds: 3),
-                                    backgroundColor: Colors.red.shade400,
-                                    content: const Text(
-                                      'Usuário não encontrado',
-                                      style: TextStyle(color: Colors.white),
-                                    )),
-                              )
-                            : (_password.text == user['password'])
-                                ? Navigator.of(context).pushNamedAndRemoveUntil(
+                                  duration: const Duration(seconds: 3),
+                                  backgroundColor: Colors.red.shade400,
+                                  content: const Text(
+                                    'Usuário não encontrado',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              if (_password.text == user['password']) {
+                                final posts = await getPosts(user['id']);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/index', (Route<dynamic> route) => false,
-                                    arguments: <Object>[user])
-                                : onIncorrectPassword();
-                      }
-                    },
-                  ),
-                )
+                                    arguments: [user, 0, posts]);
+                              } else {
+                                onIncorrectPassword();
+                              }
+                            }
+                          }
+                        })),
               ])),
     );
   }

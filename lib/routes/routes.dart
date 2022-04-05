@@ -21,9 +21,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       final user = args[0] as Map<String, dynamic>;
       if (args.length > 1) {
         final selectBody = args[1] as int;
+        final posts = args[2] as List<Map<String, dynamic>>?;
         return MaterialPageRoute(
-            builder: (_) =>
-                BottomNavigationBarIndex(user: user, selectBody: selectBody));
+          builder: (_) => BottomNavigationBarIndex(
+            user: user,
+            selectBody: selectBody,
+            posts: posts,
+          ),
+        );
       }
       return MaterialPageRoute(
           builder: (_) => BottomNavigationBarIndex(user: user));
